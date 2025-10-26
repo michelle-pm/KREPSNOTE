@@ -76,7 +76,7 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                 collapsed: { opacity: 0, height: 0 }
             }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden flex-grow flex flex-col"
+            className="overflow-hidden flex flex-col"
         >
           {childrenWidgets.length === 0 ? (
             <div className="w-full h-full flex-grow p-4">

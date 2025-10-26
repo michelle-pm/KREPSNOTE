@@ -31,8 +31,9 @@ const useMockAuth = () => {
     const isAuthenticated = !!user;
 
     const login = (email: string, password?: string) => {
+        const normalizedEmail = email.trim().toLowerCase();
         const storedUsers = JSON.parse(localStorage.getItem('users') || '{}');
-        const userData = storedUsers[email];
+        const userData = storedUsers[normalizedEmail];
 
         if (!userData) {
             throw new Error("Пользователь с таким email не найден.");
@@ -42,7 +43,7 @@ const useMockAuth = () => {
             throw new Error("Неверный пароль.");
         }
 
-        const loggedInUser: User = { id: userData.id, name: userData.name, email };
+        const loggedInUser: User = { id: userData.id, name: userData.name, email: normalizedEmail };
         localStorage.setItem('mockUser', JSON.stringify(loggedInUser));
         setUser(loggedInUser);
     };
@@ -51,15 +52,17 @@ const useMockAuth = () => {
         if (!password || password.length < 8) {
             throw new Error("Пароль должен содержать не менее 8 символов.");
         }
+        
+        const normalizedEmail = email.trim().toLowerCase();
 
         const storedUsers = JSON.parse(localStorage.getItem('users') || '{}');
-        if (storedUsers[email]) {
+        if (storedUsers[normalizedEmail]) {
             throw new Error("Пользователь с таким email уже существует.");
         }
         
-        const newUser: User = { id: `user_${Date.now()}`, name, email };
+        const newUser: User = { id: `user_${Date.now()}`, name, email: normalizedEmail };
         
-        storedUsers[email] = { ...newUser, password };
+        storedUsers[normalizedEmail] = { ...newUser, password };
         localStorage.setItem('users', JSON.stringify(storedUsers));
 
         localStorage.setItem('mockUser', JSON.stringify(newUser));
