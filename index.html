@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KREPSNOTE</title>
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMjgiIGZpbGw9IiMwRDExMjciLz48cGF0aCBkPSJNMTc2IDEyOFYzODRIMjI0VjEyOEgxNzZaIiBmaWxsPSIjQzVBN0ZGIi8+PHBhdGggZD0iTTM0MS4zMzMgMTI4TDI0MCAyNTZMMzQxLjMzMyAzODRIMzg0TDI4Mi42NjcgMjU2TDM4NCAxMjhIMzQxLjMzM1oiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl8xXzIpIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzFfMiIgeDE9IjI0MCIgeTE9IjI1NiIgeDI9IjM4NCIgeTI9IjI1NiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIHN0b3AtY29sb3I9IiNDNUE3RkYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM5Mjc0RTgiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4=" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0D1127" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            // Dark Theme Colors
+            'dark-bg': '#0D1127',
+            'dark-bg-secondary': 'rgba(28, 34, 64, 0.45)',
+            'dark-border': 'rgba(255, 255, 255, 0.08)',
+            'dark-text': '#E0E0FF',
+
+            // Light Theme Colors
+            'light-bg': '#F1F5F9',
+            'light-bg-secondary': 'rgba(248, 250, 252, 0.65)',
+            'light-border': 'rgba(51, 65, 85, 0.08)',
+            'light-text': '#1F2937',
+            'light-text-secondary': '#64748B',
+
+            'accent': '#C5A7FF',
+            'accent-dark': '#B08FF9',
+            'accent-light': 'rgba(197, 167, 255, 0.1)',
+            
+            'pastel-blue': '#A7C5FF',
+            'pastel-violet': '#C5A7FF',
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-violet': '0 0 20px 0 rgba(197, 167, 255, 0.5)',
+            'soft-light': '0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+            'soft-light-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
+            'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'glass-pane': 'inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.1)',
+          },
+          borderRadius: {
+            '2xl': '1rem',
+            '3xl': '1.5rem',
+            '4xl': '2rem',
+          }
+        },
+      },
+    }
+  </script>
+  <link rel="stylesheet" href="https://aistudiocdn.com/react-grid-layout@^1.5.2/css/styles.css" />
+  <link rel="stylesheet" href="https://aistudiocdn.com/react-resizable@^3.0.5/css/styles.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #F1F5F9; /* light-bg */
+    }
+    .dark ::-webkit-scrollbar-track {
+        background: #0D1127; /* dark-bg */
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(197, 167, 255, 0.5);
+        border-radius: 10px;
+        border: 2px solid transparent;
+        background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(197, 167, 255, 0.8);
+    }
+    .react-resizable-handle-se::after {
+        content: "";
+        position: absolute;
+        right: 4px;
+        bottom: 4px;
+        width: 6px;
+        height: 6px;
+        border-right: 2px solid rgba(197, 167, 255, 0.8);
+        border-bottom: 2px solid rgba(197, 167, 255, 0.8);
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    .react-grid-item:hover .react-resizable-handle-se::after {
+      opacity: 1;
+    }
+    .react-grid-placeholder {
+      background: rgba(197, 167, 255, 0.2) !important;
+      border-radius: 1.5rem !important;
+      border: 2px dashed #C5A7FF !important;
+      transition: all 0.2s ease-in-out !important;
+    }
+    .react-grid-item {
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .react-grid-item.react-grid-dragging {
+      transition: none;
+      z-index: 3 !important;
+    }
+    @keyframes aurora {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .aurora-background {
+        position: relative;
+        isolation: isolate;
+    }
+    .aurora-background::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(197, 167, 255, 0.3), transparent);
+        background-size: 200% 200%;
+        animation: aurora 15s ease infinite;
+    }
+    .dark .aurora-background::before {
+        background: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 119, 198, 0.2), transparent);
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-grid-layout": "https://aistudiocdn.com/react-grid-layout@^1.5.2",
+    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.548.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.3.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.0",
+    "vite": "https://aistudiocdn.com/vite@^7.1.12"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

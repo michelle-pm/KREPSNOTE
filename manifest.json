@@ -1,0 +1,9 @@
+{
+  "short_name": "KREPSNOTE",
+  "name": "KREPSNOTE Dashboard",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0D1127",
+  "background_color": "#0D1127",
+  "description": "KREPSNOTE: Ваш персональный дашборд для заметок и планов."
+}
