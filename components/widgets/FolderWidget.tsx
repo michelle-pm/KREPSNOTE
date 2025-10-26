@@ -1,6 +1,4 @@
-
-
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Widget, WidgetType, FolderData, WidgetData } from '../../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
@@ -34,6 +32,7 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
 }) => {
   const data = widget.data as FolderData;
   const { isCollapsed, childrenLayouts } = data;
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<string>('lg');
   
   const childrenWidgets = useMemo(() => {
     return allWidgets.filter(w => w.parentId === widget.id);
@@ -43,6 +42,14 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
       onChildrenLayoutChange(widget.id, allLayouts);
   };
   
+  const handleResize = (layout: Layout[], oldItem: Layout, newItem: Layout) => {
+      const newAllLayouts = {
+          ...(childrenLayouts || {}),
+          [currentBreakpoint]: layout,
+      };
+      onChildrenLayoutChange(widget.id, newAllLayouts);
+  };
+
   const processedChildrenLayouts = useMemo(() => {
     const newLayouts = JSON.parse(JSON.stringify(childrenLayouts || {}));
     Object.keys(newLayouts).forEach(bp => {
@@ -102,6 +109,8 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                   rowHeight={21}
                   compactType="vertical"
                   onLayoutChange={handleLayoutUpdate}
+                  onResize={handleResize}
+                  onBreakpointChange={setCurrentBreakpoint}
                   draggableHandle=".drag-handle"
                   draggableCancel=".no-drag, input, textarea, button, select"
                   isDroppable={true}
