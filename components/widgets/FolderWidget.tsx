@@ -76,10 +76,10 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                 collapsed: { opacity: 0, height: 0 }
             }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden flex-grow"
+            className="overflow-hidden flex-grow flex flex-col"
         >
           {childrenWidgets.length === 0 ? (
-            <div className="w-full h-full p-4">
+            <div className="w-full h-full flex-grow p-4">
                 <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center">
                     <p className="text-center text-light-text-secondary dark:text-dark-text/60 mb-4 px-4">
                         Эта папка пуста. Добавьте в нее виджеты.
@@ -94,42 +94,44 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                 </div>
             </div>
           ) : (
-            <ResponsiveGridLayout
-                layouts={processedChildrenLayouts}
-                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-                cols={NESTED_GRID_COLS}
-                rowHeight={21}
-                compactType="vertical"
-                onLayoutChange={handleLayoutUpdate}
-                draggableHandle=".drag-handle"
-                draggableCancel=".no-drag, input, textarea, button, select"
-                isDroppable={true}
-                margin={[8, 8]}
-                isBounded={true}
-                onDragStart={onDragStart}
-                onDragStop={onDragStop}
-                onResizeStop={onResizeStop}
-            >
-                {childrenWidgets.map(child => (
-                    <div key={child.id} id={`widget-${child.id}`} className="cursor-auto">
-                        <WidgetWrapper
-                            onRemove={() => onRemoveWidget(child.id)}
-                            widgetId={child.id}
-                            widgetTitle={child.data.title || 'widget'}
-                            onTitleChange={(newTitle) => onUpdateWidgetData(child.id, {...child.data, title: newTitle})}
-                            theme={theme}
-                            isFolder={child.type === WidgetType.Folder}
-                            folderData={child.type === WidgetType.Folder ? (child.data as FolderData) : undefined}
-                            folderColor={child.type === WidgetType.Folder ? (child.data as FolderData).color : undefined}
-                            onFolderColorChange={child.type === WidgetType.Folder ? (newColor) => onUpdateWidgetData(child.id, { ...child.data, color: newColor }) : undefined}
-                            onFolderToggle={() => onToggleFolder(child.id)}
-                            onFolderAddWidget={child.type === WidgetType.Folder ? () => onInitiateAddWidget(child.id) : undefined}
-                        >
-                            {renderWidget(child, allWidgets)}
-                        </WidgetWrapper>
-                    </div>
-                ))}
-            </ResponsiveGridLayout>
+            <div className="flex-grow">
+              <ResponsiveGridLayout
+                  layouts={processedChildrenLayouts}
+                  breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                  cols={NESTED_GRID_COLS}
+                  rowHeight={21}
+                  compactType="vertical"
+                  onLayoutChange={handleLayoutUpdate}
+                  draggableHandle=".drag-handle"
+                  draggableCancel=".no-drag, input, textarea, button, select"
+                  isDroppable={true}
+                  margin={[8, 8]}
+                  isBounded={true}
+                  onDragStart={onDragStart}
+                  onDragStop={onDragStop}
+                  onResizeStop={onResizeStop}
+              >
+                  {childrenWidgets.map(child => (
+                      <div key={child.id} id={`widget-${child.id}`} className="cursor-auto">
+                          <WidgetWrapper
+                              onRemove={() => onRemoveWidget(child.id)}
+                              widgetId={child.id}
+                              widgetTitle={child.data.title || 'widget'}
+                              onTitleChange={(newTitle) => onUpdateWidgetData(child.id, {...child.data, title: newTitle})}
+                              theme={theme}
+                              isFolder={child.type === WidgetType.Folder}
+                              folderData={child.type === WidgetType.Folder ? (child.data as FolderData) : undefined}
+                              folderColor={child.type === WidgetType.Folder ? (child.data as FolderData).color : undefined}
+                              onFolderColorChange={child.type === WidgetType.Folder ? (newColor) => onUpdateWidgetData(child.id, { ...child.data, color: newColor }) : undefined}
+                              onFolderToggle={() => onToggleFolder(child.id)}
+                              onFolderAddWidget={child.type === WidgetType.Folder ? () => onInitiateAddWidget(child.id) : undefined}
+                          >
+                              {renderWidget(child, allWidgets)}
+                          </WidgetWrapper>
+                      </div>
+                  ))}
+              </ResponsiveGridLayout>
+            </div>
           )}
         </motion.div>
       )}

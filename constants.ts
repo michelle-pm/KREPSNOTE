@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const WIDGET_DEFAULTS = {
   [WidgetType.Plan]: {
-    w: 4, h: 4, minW: 3, minH: 5,
+    w: 4, h: 5, minW: 3, minH: 5,
     data: {
       title: 'План выполнения',
       current: 7500,

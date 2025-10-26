@@ -117,15 +117,17 @@ const ChecklistWidget: React.FC<ChecklistWidgetProps> = ({ data, updateData }) =
         }}
         className="mt-4 border-t border-light-border dark:border-dark-border pt-3"
       >
-        <div className="flex items-center gap-2 p-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 focus-within:bg-black/5 dark:focus-within:bg-white/5 transition-colors">
-            <Plus size={24} className="text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2" />
+        <div className="flex items-center gap-2">
             <input
             type="text"
             value={newItemText}
             onChange={(e) => setNewItemText(e.target.value)}
             placeholder="Добавить новую задачу..."
-            className="flex-grow bg-transparent focus:outline-none p-1 font-semibold text-base placeholder:text-gray-400 dark:placeholder:text-gray-500"
+            className="flex-grow w-full bg-black/5 dark:bg-white/5 focus:outline-none p-3 font-semibold text-base placeholder:text-gray-400 dark:placeholder:text-gray-500 rounded-lg border-2 border-transparent focus:border-accent transition-colors"
             />
+            <button type="submit" aria-label="Добавить задачу" className="p-3 bg-accent hover:bg-accent-dark text-dark-bg rounded-lg transition-colors flex-shrink-0">
+              <Plus size={20} />
+            </button>
         </div>
       </form>
     </div>
