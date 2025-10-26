@@ -30,7 +30,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ onClose, ac
   const handleInvite = (e: React.FormEvent) => {
     e.preventDefault();
     const emailToInvite = (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value;
-    alert(`Приглашение отправлено на ${emailToInvite} для просмотра доски "${activeWorkspaceName}" (демонстрация).`);
+    alert(`Приглашение отправлено на ${emailToInvite} для просмотра доски "${activeWorkspaceName}". Обратите внимание: это демонстрационная функция, реальные письма не отправляются.`);
     (e.currentTarget.elements.namedItem('email') as HTMLInputElement).value = '';
   }
 
@@ -56,7 +56,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ onClose, ac
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
         transition={{ ease: "easeOut", duration: 0.3 }}
-        className="fixed inset-0 m-auto w-full max-w-2xl h-fit max-h-[90vh] bg-light-bg-secondary/80 dark:bg-dark-bg-secondary/70 backdrop-blur-2xl z-50 shadow-2xl p-8 rounded-4xl flex flex-col border border-light-border dark:border-dark-border"
+        className="fixed inset-0 m-auto w-11/12 max-w-2xl h-fit max-h-[90vh] bg-light-bg-secondary/80 dark:bg-dark-bg-secondary/70 backdrop-blur-2xl z-50 shadow-2xl p-8 rounded-4xl flex flex-col border border-light-border dark:border-dark-border"
       >
         <div className="flex justify-between items-center mb-6 flex-shrink-0">
           <h2 className="text-2xl font-bold">Настройки аккаунта</h2>
@@ -70,9 +70,9 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ onClose, ac
           <div className="p-6 rounded-2xl bg-black/5 dark:bg-white/5">
             <h3 className="font-semibold text-lg mb-4 flex items-center gap-3"><KeyRound size={20} className="text-accent" /> Смена пароля</h3>
             <form onSubmit={handlePasswordChange} className="flex flex-col gap-4">
-                <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} placeholder="Старый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
-                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Новый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
-                <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Подтвердите новый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
+                <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} placeholder="Старый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
+                <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Новый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
+                <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Подтвердите новый пароль" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
                 <button type="submit" className="self-start mt-2 px-6 py-2 bg-accent hover:bg-accent-dark text-dark-bg font-bold rounded-lg transition-all duration-200 shadow-md hover:shadow-glow-violet">
                     Сохранить
                 </button>
@@ -82,13 +82,15 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ onClose, ac
           {/* Invite Users Section */}
           <div className="p-6 rounded-2xl bg-black/5 dark:bg-white/5">
             <h3 className="font-semibold text-lg mb-4 flex items-center gap-3"><UserPlus size={20} className="text-accent" /> Пригласить в доску "{activeWorkspaceName}"</h3>
-            <form onSubmit={handleInvite} className="flex items-center gap-4">
-                <input name="email" type="email" placeholder="email@example.com" required className="flex-grow p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
+            <form onSubmit={handleInvite} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                <input name="email" type="email" placeholder="email@example.com" required className="flex-grow p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
                 <button type="submit" className="px-6 py-3 bg-accent hover:bg-accent-dark text-dark-bg font-bold rounded-lg transition-all duration-200 shadow-md hover:shadow-glow-violet">
                     Пригласить
                 </button>
             </form>
-            <p className="text-xs text-light-text-secondary dark:text-dark-text/60 mt-2">Приглашенные пользователи смогут только просматривать эту доску.</p>
+             <p className="text-xs text-light-text-secondary dark:text-dark-text/60 mt-2">
+                <b>Примечание:</b> Это демонстрационная функция. Реальные электронные письма не отправляются.
+            </p>
           </div>
 
           {/* Share Section */}
@@ -117,7 +119,7 @@ const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({ onClose, ac
                         exit={{ opacity: 0, height: 0, marginTop: 0 }}
                         className="relative"
                     >
-                        <input type="text" readOnly value={publicLink} className="w-full p-3 pr-12 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border" />
+                        <input type="text" readOnly value={publicLink} className="w-full p-3 pr-12 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border text-base" />
                         <button onClick={copyToClipboard} className="absolute inset-y-0 right-0 px-3 flex items-center text-light-text-secondary dark:text-dark-text/60 hover:text-accent transition-colors">
                            {copied ? <Check size={20} /> : <Copy size={20} />}
                         </button>

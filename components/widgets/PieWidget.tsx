@@ -92,11 +92,11 @@ const PieWidget: React.FC<PieWidgetProps> = ({ data, updateData }) => {
       </div>
       <div className="flex justify-around items-center gap-4 mt-2">
          <div className="flex flex-col gap-1 w-1/2">
-             <input value={totalLabel} onChange={e => handleUpdate('totalLabel', e.target.value)} onFocus={handleFocus} className="bg-transparent text-light-text-secondary dark:text-dark-text/60 focus:outline-none text-center text-xs p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
+             <input value={totalLabel} onChange={e => handleUpdate('totalLabel', e.target.value)} onFocus={handleFocus} className="bg-transparent text-light-text-secondary dark:text-dark-text/60 focus:outline-none text-center text-sm p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
              <input type="number" value={total} onChange={e => handleUpdate('total', e.target.value)} onFocus={handleFocus} className="bg-transparent w-full text-center focus:outline-none p-1 text-lg font-semibold rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
          </div>
          <div className="flex flex-col gap-1 w-1/2">
-             <input value={partLabel} onChange={e => handleUpdate('partLabel', e.target.value)} onFocus={handleFocus} className="bg-transparent text-light-text-secondary dark:text-dark-text/60 focus:outline-none text-center text-xs p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
+             <input value={partLabel} onChange={e => handleUpdate('partLabel', e.target.value)} onFocus={handleFocus} className="bg-transparent text-light-text-secondary dark:text-dark-text/60 focus:outline-none text-center text-sm p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
              <input type="number" value={part} onChange={e => handleUpdate('part', e.target.value)} onFocus={handleFocus} className="bg-transparent w-full text-center focus:outline-none p-1 text-lg font-semibold rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors" />
          </div>
       </div>

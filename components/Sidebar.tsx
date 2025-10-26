@@ -70,13 +70,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 onChange={(e) => setTempName(e.target.value)}
                                 onBlur={handleRenameSave}
                                 onKeyDown={(e) => e.key === 'Enter' && handleRenameSave()}
-                                className="bg-transparent outline-none w-full"
+                                className="bg-transparent outline-none w-full text-base"
                                 autoFocus
                             />
                         ) : (
                             <span className="flex-grow truncate">{ws.name}</span>
                         )}
-                        <div className={`flex items-center ${activeWorkspaceId === ws.id ? (theme === 'dark' ? 'text-accent' : 'text-dark-bg') : 'text-transparent group-hover:text-current'}`}>
+                        <div className={`flex items-center sm:text-transparent sm:group-hover:text-current ${activeWorkspaceId === ws.id ? (theme === 'dark' ? 'text-accent' : 'text-dark-bg') : 'text-light-text-secondary dark:text-dark-text/60'}`}>
                            <button onClick={(e) => { e.stopPropagation(); handleRenameStart(ws); }} className="p-1 rounded-md hover:bg-black/20 dark:hover:bg-white/20"><FilePenLine size={14}/></button>
                            <button onClick={(e) => { e.stopPropagation(); onWorkspaceDelete(ws.id); }} className="p-1 rounded-md hover:bg-black/20 dark:hover:bg-white/20"><Trash2 size={14}/></button>
                         </div>

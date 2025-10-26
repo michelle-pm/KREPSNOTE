@@ -86,7 +86,7 @@ const PlanWidget: React.FC<PlanWidgetProps> = ({ data, updateData }) => {
 
             <div className={`grid ${unit === '%' ? 'grid-cols-1' : 'grid-cols-2'} gap-4 w-full font-medium mt-4`}>
                 <div className="flex flex-col items-start gap-1">
-                    <label className="text-light-text-secondary dark:text-dark-text/60 text-xs font-semibold px-1 w-full text-center">
+                    <label className="text-light-text-secondary dark:text-dark-text/60 text-sm font-semibold px-1 w-full text-center">
                         {unit === '%' ? 'Процент выполнения' : 'Текущее значение'}
                     </label>
                     <input 
@@ -107,7 +107,7 @@ const PlanWidget: React.FC<PlanWidgetProps> = ({ data, updateData }) => {
                         className="w-full"
                     >
                         <div className="flex flex-col items-start gap-1">
-                            <label className="text-light-text-secondary dark:text-dark-text/60 text-xs font-semibold px-1 w-full text-center">Целевое значение</label>
+                            <label className="text-light-text-secondary dark:text-dark-text/60 text-sm font-semibold px-1 w-full text-center">Целевое значение</label>
                             <input 
                                 type="number"
                                 value={target}
@@ -125,7 +125,7 @@ const PlanWidget: React.FC<PlanWidgetProps> = ({ data, updateData }) => {
 
       <div className="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 w-full mt-1">
         <div className="flex items-center gap-1">
-            <label className="text-light-text-secondary dark:text-dark-text/60 text-xs font-semibold whitespace-nowrap">Единицы:</label>
+            <label className="text-light-text-secondary dark:text-dark-text/60 text-sm font-semibold whitespace-nowrap">Единицы:</label>
             <AnimatePresence>
             {unit === 'custom' && (
                 <motion.div initial={{width: 0, opacity: 0}} animate={{width: 'auto', opacity: 1}} exit={{width: 0, opacity: 0}}>
@@ -135,7 +135,6 @@ const PlanWidget: React.FC<PlanWidgetProps> = ({ data, updateData }) => {
                         onChange={(e) => handleUpdate('customUnit', e.target.value)}
                         onFocus={handleFocus}
                         className="bg-transparent w-16 text-center font-semibold text-light-text-secondary dark:text-dark-text/80 focus:outline-none p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5"
-                        placeholder="Unit"
                     />
                 </motion.div>
             )}
@@ -143,7 +142,7 @@ const PlanWidget: React.FC<PlanWidgetProps> = ({ data, updateData }) => {
             <select
                 value={unit}
                 onChange={(e) => handleUpdate('unit', e.target.value)}
-                className="bg-transparent font-semibold text-light-text-secondary dark:text-dark-text/80 focus:outline-none no-drag p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5"
+                className="bg-transparent font-semibold text-light-text-secondary dark:text-dark-text/80 focus:outline-none no-drag p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 text-sm"
             >
                 <option value="%">%</option>
                 <option value="₽">₽</option>

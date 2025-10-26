@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { ChecklistData, ChecklistItem } from '../../types';
 import { Plus, Trash2, Check } from 'lucide-react';
@@ -102,7 +103,7 @@ const ChecklistWidget: React.FC<ChecklistWidgetProps> = ({ data, updateData }) =
                     onFocus={handleFocus}
                     className={`flex-grow bg-transparent focus:outline-none p-1 transition-colors font-semibold text-base text-light-text dark:text-dark-text ${item.completed ? 'line-through text-gray-400 dark:text-gray-500' : ''}`}
                 />
-                <button onClick={() => deleteItem(item.id)} className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => deleteItem(item.id)} className="text-gray-400 hover:text-red-500 transition-opacity">
                     <Trash2 size={18} />
                 </button>
             </motion.div>

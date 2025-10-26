@@ -1,6 +1,6 @@
 
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
 import { Widget, WidgetType, PlanData, PieData, LineData, TextData, WidgetData, TitleData, ChecklistData, ImageData, ArticleData, FolderData } from '../types';
 import WidgetWrapper from './WidgetWrapper';
@@ -52,7 +52,15 @@ const Dashboard: React.FC<DashboardProps> = ({
     onToggleFolder, onInitiateAddWidget, theme,
     draggingWidgetId, onDragStart, onDragStop, onResizeStop, setDraggingWidgetId, gridCols
 }) => {
-  
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const synchronizedWidgets = useMemo(() => {
     const widgetMap = new Map(widgets.map(w => [w.id, w]));
     return widgets.map(widget => {
@@ -176,6 +184,8 @@ const Dashboard: React.FC<DashboardProps> = ({
         isDroppable={true}
         margin={[16, 16]}
         isBounded={true}
+        isDraggable={!isMobile}
+        isResizable={!isMobile}
       >
         {topLevelWidgets.map(widget => (
           <div key={widget.id} id={`widget-${widget.id}`} className="cursor-auto" style={{ zIndex: widget.type === WidgetType.Folder ? 1 : 2 }}>

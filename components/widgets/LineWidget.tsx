@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { LineData, Widget, LineDataPoint } from '../../types';
@@ -149,14 +150,14 @@ const LineWidget: React.FC<LineWidgetProps> = ({ data, updateData, allWidgets, c
                   </div>
                   <div className="flex flex-col gap-1">
                     {s.data.map(point => (
-                        <motion.div layout key={point.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
+                        <motion.div layout key={point.id} className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
                             <input 
                               type="text"
                               value={point.x}
                               placeholder="Label"
                               onChange={e => updatePoint(s.name, point.id, { x: e.target.value })}
                               onFocus={handleFocus}
-                              className="bg-transparent p-1 rounded-md flex-grow min-w-[80px] hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:bg-black/10 dark:focus:bg-white/10"
+                              className="bg-transparent p-1 rounded-md flex-grow min-w-[80px] hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:bg-black/10 dark:focus:bg-white/10 text-base"
                             />
                             <input
                               type="number"
@@ -165,9 +166,9 @@ const LineWidget: React.FC<LineWidgetProps> = ({ data, updateData, allWidgets, c
                               onChange={e => updatePoint(s.name, point.id, { y: parseFloat(e.target.value) || 0 })}
                               onFocus={handleFocus}
                               disabled={!!point.dependency}
-                              className="bg-transparent p-1 rounded-md w-20 hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:bg-black/10 dark:focus:bg-white/10 disabled:opacity-50"
+                              className="bg-transparent p-1 rounded-md w-auto sm:w-20 hover:bg-black/5 dark:hover:bg-white/5 focus:outline-none focus:bg-black/10 dark:focus:bg-white/10 disabled:opacity-50 text-base"
                             />
-                            <div className="flex-grow min-w-[150px]">
+                            <div className="flex-grow min-w-0 sm:min-w-[150px]">
                                 <DependencySelector 
                                   allWidgets={allWidgets}
                                   currentWidgetId={currentWidgetId}
@@ -175,7 +176,7 @@ const LineWidget: React.FC<LineWidgetProps> = ({ data, updateData, allWidgets, c
                                   onChange={dep => updatePoint(s.name, point.id, { dependency: dep })}
                                 />
                             </div>
-                            <button onClick={() => deletePoint(s.name, point.id)} className="text-gray-400 hover:text-red-500 p-1">
+                            <button onClick={() => deletePoint(s.name, point.id)} className="text-gray-400 hover:text-red-500 p-1 self-end sm:self-center">
                                 <Trash2 size={14}/>
                             </button>
                         </motion.div>

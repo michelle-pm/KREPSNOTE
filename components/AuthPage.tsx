@@ -14,21 +14,31 @@ const AuthPage: React.FC = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      setError('');
-      if (!email) {
-          setError('Требуется адрес электронной почты.');
-          return;
-      }
+    e.preventDefault();
+    setError('');
+
+    if (!email) {
+      setError('Требуется адрес электронной почты.');
+      return;
+    }
+    if (!password) {
+        setError('Требуется пароль.');
+        return;
+    }
+    if (!isLoginView && !name) {
+      setError('Для регистрации требуется имя.');
+      return;
+    }
+
+    try {
       if (isLoginView) {
-          login(email, password);
+        login(email, password);
       } else {
-          if (!name) {
-              setError('Для регистрации требуется имя.');
-              return;
-          }
-          register(name, email, password);
+        register(name, email, password);
       }
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   const formVariants = {
@@ -73,12 +83,12 @@ const AuthPage: React.FC = () => {
                     {!isLoginView && (
                          <div>
                             <label className="block text-sm font-medium mb-1">Имя</label>
-                            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ваше имя" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
+                            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Ваше имя" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
                         </div>
                     )}
                     <div>
                         <label className="block text-sm font-medium mb-1">Email</label>
-                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all" />
+                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all text-base" />
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Пароль</label>
@@ -88,7 +98,7 @@ const AuthPage: React.FC = () => {
                                 value={password} 
                                 onChange={e => setPassword(e.target.value)} 
                                 placeholder="••••••••" 
-                                className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all pr-10" 
+                                className="w-full p-3 bg-white/50 dark:bg-black/20 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-accent transition-all pr-10 text-base" 
                             />
                             <button
                                 type="button"

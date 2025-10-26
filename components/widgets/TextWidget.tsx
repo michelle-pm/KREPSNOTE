@@ -19,7 +19,7 @@ const TextWidget: React.FC<TextWidgetProps> = ({ data, updateData }) => {
         value={content}
         onChange={(e) => updateData({ ...data, content: e.target.value })}
         onFocus={handleFocus}
-        className="flex-grow w-full bg-transparent resize-none text-sm text-light-text/80 dark:text-dark-text/80 focus:outline-none leading-relaxed p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors"
+        className="flex-grow w-full bg-transparent resize-none text-base text-light-text/80 dark:text-dark-text/80 focus:outline-none leading-relaxed p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 focus:bg-black/10 dark:focus:bg-white/10 transition-colors"
         placeholder="Введите ваш текст здесь..."
       />
     </div>

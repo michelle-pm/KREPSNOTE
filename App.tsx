@@ -24,8 +24,8 @@ const DEFAULT_WORKSPACE_ID = 'default-workspace';
 const MAX_HISTORY_LENGTH = 20;
 
 // Grid layout constants
-const GRID_COLS = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
-export const NESTED_GRID_COLS = { lg: 24, md: 20, sm: 12, xs: 8, xxs: 4 };
+const GRID_COLS = { lg: 12, md: 10, sm: 6, xs: 2, xxs: 1 };
+export const NESTED_GRID_COLS = { lg: 24, md: 20, sm: 12, xs: 4, xxs: 2 };
 
 
 const App: React.FC = () => {

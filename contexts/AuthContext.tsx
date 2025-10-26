@@ -31,30 +31,37 @@ const useMockAuth = () => {
     const isAuthenticated = !!user;
 
     const login = (email: string, password?: string) => {
-        // In a real app, you'd validate the password. Here we just log in.
         const storedUsers = JSON.parse(localStorage.getItem('users') || '{}');
         const userData = storedUsers[email];
 
-        // For this mock, we'll just log in if the user exists, ignoring password for simplicity
-        if (userData) {
-            const loggedInUser = { id: userData.id, name: userData.name, email };
-            localStorage.setItem('mockUser', JSON.stringify(loggedInUser));
-            setUser(loggedInUser);
-        } else {
-            // For demo purposes, let's create a new user if not found during login
-            register(`User ${email.split('@')[0]}`, email, password);
+        if (!userData) {
+            throw new Error("Пользователь с таким email не найден.");
         }
+        
+        if (userData.password !== password) {
+            throw new Error("Неверный пароль.");
+        }
+
+        const loggedInUser: User = { id: userData.id, name: userData.name, email };
+        localStorage.setItem('mockUser', JSON.stringify(loggedInUser));
+        setUser(loggedInUser);
     };
 
     const register = (name: string, email: string, password?: string) => {
+        if (!password || password.length < 8) {
+            throw new Error("Пароль должен содержать не менее 8 символов.");
+        }
+
+        const storedUsers = JSON.parse(localStorage.getItem('users') || '{}');
+        if (storedUsers[email]) {
+            throw new Error("Пользователь с таким email уже существует.");
+        }
+        
         const newUser: User = { id: `user_${Date.now()}`, name, email };
         
-        // Store user in a mock "users" database in localStorage
-        const storedUsers = JSON.parse(localStorage.getItem('users') || '{}');
-        storedUsers[email] = { ...newUser, password }; // Storing password for mock change later
+        storedUsers[email] = { ...newUser, password };
         localStorage.setItem('users', JSON.stringify(storedUsers));
 
-        // Log the new user in
         localStorage.setItem('mockUser', JSON.stringify(newUser));
         setUser(newUser);
     };
