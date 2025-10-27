@@ -44,19 +44,25 @@ const App: React.FC = () => {
   const [history, setHistory] = useState<{ workspaces: Workspace[]; activeWorkspaceId: string; }[]>([]);
   const [scrollToWidgetId, setScrollToWidgetId] = useState<string | null>(null);
   
-  // Effect to initialize default workspace for new users
+  // Effect to initialize default workspace for new users, preventing data overwrite on login
   useEffect(() => {
-    if (isAuthenticated && workspaces.length === 0) {
-      const newWorkspace: Workspace = {
-        id: DEFAULT_WORKSPACE_ID,
-        name: 'Мое пространство',
-        widgets: [],
-        layouts: {},
-      };
-      setWorkspaces([newWorkspace]);
-      setActiveWorkspaceId(newWorkspace.id);
+    if (isAuthenticated && user?.email) {
+      const userWorkspaceKey = `${user.email}_workspaces`;
+      // Use raw localStorage check to avoid race condition with the hook's async state update
+      const storedData = window.localStorage.getItem(userWorkspaceKey);
+      
+      if (workspaces.length === 0 && storedData === null) {
+        const newWorkspace: Workspace = {
+          id: DEFAULT_WORKSPACE_ID,
+          name: 'Мое пространство',
+          widgets: [],
+          layouts: {},
+        };
+        setWorkspaces([newWorkspace]);
+        setActiveWorkspaceId(newWorkspace.id);
+      }
     }
-  }, [isAuthenticated, workspaces, setWorkspaces, setActiveWorkspaceId]);
+  }, [isAuthenticated, user, workspaces.length, setWorkspaces, setActiveWorkspaceId]);
 
 
   const pushStateToHistory = useCallback(() => {
@@ -80,19 +86,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (!isAuthenticated) return;
-    if (workspaces.length === 0) {
-      const newWorkspace: Workspace = {
-        id: DEFAULT_WORKSPACE_ID,
-        name: 'Мое пространство',
-        widgets: [],
-        layouts: {},
-      };
-      setWorkspaces([newWorkspace]);
-      setActiveWorkspaceId(newWorkspace.id);
-    } else if (!workspaces.find(ws => ws.id === activeWorkspaceId)) {
-      setActiveWorkspaceId(workspaces[0]?.id || DEFAULT_WORKSPACE_ID);
+    if (workspaces.length > 0 && !workspaces.find(ws => ws.id === activeWorkspaceId)) {
+      setActiveWorkspaceId(workspaces[0].id);
     }
-  }, [workspaces, activeWorkspaceId, setWorkspaces, setActiveWorkspaceId, isAuthenticated]);
+  }, [workspaces, activeWorkspaceId, setActiveWorkspaceId, isAuthenticated]);
 
   useEffect(() => {
     setWorkspaces(prevWorkspaces => {
@@ -328,7 +325,7 @@ const App: React.FC = () => {
 
   const handleLayoutChange = useCallback((layout: Layout[], allLayouts: { [key: string]: Layout[] }) => {
     updateActiveWorkspace(ws => {
-      const updatedLayouts = JSON.parse(JSON.stringify(allLayouts));
+      const updatedLayouts = allLayouts; // No need for deep copy, react-grid-layout provides new object
       const newWidgets = ws.widgets.map(widget => {
         if (widget.type === WidgetType.Folder) {
           const layoutItem = layout.find(l => l.i === widget.id);

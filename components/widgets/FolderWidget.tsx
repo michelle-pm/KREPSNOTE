@@ -87,7 +87,7 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
         >
           {childrenWidgets.length === 0 ? (
             <div className="w-full h-full flex-grow p-4">
-                <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center">
+                <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center p-4">
                     <p className="text-center text-light-text-secondary dark:text-dark-text/60 mb-4 px-4">
                         Эта папка пуста. Добавьте в нее виджеты.
                     </p>
