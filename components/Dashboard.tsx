@@ -1,21 +1,22 @@
-
-
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, Suspense, lazy } from 'react';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
 import { Widget, WidgetType, PlanData, PieData, LineData, TextData, WidgetData, TitleData, ChecklistData, ImageData, ArticleData, FolderData } from '../types';
 import WidgetWrapper from './WidgetWrapper';
-import PlanWidget from './widgets/PlanWidget';
-import PieWidget from './widgets/PieWidget';
-import LineWidget from './widgets/LineWidget';
-import TextWidget from './widgets/TextWidget';
-import TitleWidget from './widgets/TitleWidget';
-import ChecklistWidget from './widgets/ChecklistWidget';
-import ImageWidget from './widgets/ImageWidget';
-import ArticleWidget from './widgets/ArticleWidget';
 import FolderWidget from './widgets/FolderWidget';
 import { WIDGET_DEFAULTS } from '../constants';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
+
+// Lazy load widget components to split code and reduce build memory usage
+const PlanWidget = lazy(() => import('./widgets/PlanWidget'));
+const PieWidget = lazy(() => import('./widgets/PieWidget'));
+const LineWidget = lazy(() => import('./widgets/LineWidget'));
+const TextWidget = lazy(() => import('./widgets/TextWidget'));
+const TitleWidget = lazy(() => import('./widgets/TitleWidget'));
+const ChecklistWidget = lazy(() => import('./widgets/ChecklistWidget'));
+const ImageWidget = lazy(() => import('./widgets/ImageWidget'));
+const ArticleWidget = lazy(() => import('./widgets/ArticleWidget'));
+
 
 interface DashboardProps {
   widgets: Widget[];
@@ -202,7 +203,9 @@ const Dashboard: React.FC<DashboardProps> = ({
               onFolderToggle={() => onToggleFolder(widget.id)}
               onFolderAddWidget={widget.type === WidgetType.Folder ? () => onInitiateAddWidget(widget.id) : undefined}
             >
-              {renderWidget(widget, synchronizedWidgets)}
+              <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-gray-400">Загрузка виджета...</div>}>
+                {renderWidget(widget, synchronizedWidgets)}
+              </Suspense>
             </WidgetWrapper>
           </div>
         ))}
@@ -211,4 +214,4 @@ const Dashboard: React.FC<DashboardProps> = ({
   );
 };
 
-export default Dashboard;
+export default React.memo(Dashboard);

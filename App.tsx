@@ -44,26 +44,7 @@ const App: React.FC = () => {
   const [history, setHistory] = useState<{ workspaces: Workspace[]; activeWorkspaceId: string; }[]>([]);
   const [scrollToWidgetId, setScrollToWidgetId] = useState<string | null>(null);
   
-  // Effect to initialize default workspace for new users, preventing data overwrite on login
-  useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      const userWorkspaceKey = `${user.email}_workspaces`;
-      // Use raw localStorage check to avoid race condition with the hook's async state update
-      const storedData = window.localStorage.getItem(userWorkspaceKey);
-      
-      if (workspaces.length === 0 && storedData === null) {
-        const newWorkspace: Workspace = {
-          id: DEFAULT_WORKSPACE_ID,
-          name: 'Мое пространство',
-          widgets: [],
-          layouts: {},
-        };
-        setWorkspaces([newWorkspace]);
-        setActiveWorkspaceId(newWorkspace.id);
-      }
-    }
-  }, [isAuthenticated, user, workspaces.length, setWorkspaces, setActiveWorkspaceId]);
-
+  // Removed faulty initialization useEffect. Logic is now handled robustly in useLocalStorage hook.
 
   const pushStateToHistory = useCallback(() => {
     setHistory(prev => {
@@ -429,16 +410,16 @@ const App: React.FC = () => {
       });
   }, [updateActiveWorkspace, pushStateToHistory]);
     
-  const handleDragStart = (layout: Layout[], oldItem: Layout) => {
+  const handleDragStart = useCallback((layout: Layout[], oldItem: Layout) => {
       setDraggingWidgetId(oldItem.i);
-  };
-  const handleDragStop = () => {
+  }, []);
+  const handleDragStop = useCallback(() => {
       pushStateToHistory();
       setDraggingWidgetId(null);
-  };
-   const handleResizeStop = () => {
+  }, [pushStateToHistory]);
+   const handleResizeStop = useCallback(() => {
       pushStateToHistory();
-  };
+  }, [pushStateToHistory]);
 
   const handleAddWorkspace = () => {
       pushStateToHistory();

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, Suspense } from 'react';
 import { Widget, WidgetType, FolderData, WidgetData } from '../../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
@@ -83,11 +83,11 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                 collapsed: { opacity: 0, height: 0 }
             }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden flex flex-col"
+            className="overflow-hidden flex flex-col flex-grow"
         >
           {childrenWidgets.length === 0 ? (
-            <div className="w-full h-full flex-grow p-4">
-                <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center p-4">
+            <div className="w-full h-full flex-grow p-4 flex">
+                <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center p-8">
                     <p className="text-center text-light-text-secondary dark:text-dark-text/60 mb-4 px-4">
                         Эта папка пуста. Добавьте в нее виджеты.
                     </p>
@@ -135,7 +135,9 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                               onFolderToggle={() => onToggleFolder(child.id)}
                               onFolderAddWidget={child.type === WidgetType.Folder ? () => onInitiateAddWidget(child.id) : undefined}
                           >
-                              {renderWidget(child, allWidgets)}
+                              <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">Загрузка...</div>}>
+                                {renderWidget(child, allWidgets)}
+                              </Suspense>
                           </WidgetWrapper>
                       </div>
                   ))}
