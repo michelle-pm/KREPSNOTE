@@ -3,6 +3,54 @@ import { Workspace } from '../types';
 
 const DEFAULT_WORKSPACE_ID = 'default-workspace';
 
+/**
+ * Reads a value from localStorage for a given user.
+ * This function is the single source of truth for initializing state from storage.
+ * It is designed to be non-destructive.
+ */
+function getInitialValue<T>(key: string, initialValue: T, userEmail?: string | null): T {
+  const prefixedKey = userEmail ? `${userEmail}_${key}` : key;
+
+  if (typeof window === 'undefined') {
+    return initialValue;
+  }
+
+  try {
+    const item = window.localStorage.getItem(prefixedKey);
+    // If data exists for the user, parse and return it.
+    if (item) {
+      return JSON.parse(item);
+    }
+
+    // --- Logic for creating default data for a NEW user ---
+    // This only runs if `item` is null.
+    if (userEmail) {
+      if (key === 'workspaces') {
+        const newWorkspace: Workspace = {
+          id: DEFAULT_WORKSPACE_ID,
+          name: 'Мое пространство',
+          widgets: [],
+          layouts: {},
+        };
+        // Return the default workspace structure for a new user.
+        return [newWorkspace] as unknown as T;
+      }
+      if (key === 'activeWorkspaceId') {
+        return DEFAULT_WORKSPACE_ID as unknown as T;
+      }
+    }
+
+    // Fallback for logged-out users or non-user-specific keys.
+    return initialValue;
+  } catch (error) {
+    console.error(`Error reading localStorage key “${prefixedKey}”:`, error);
+    return initialValue;
+  }
+}
+
+/**
+ * A hook to manage state in localStorage, safely handling user authentication changes.
+ */
 function useLocalStorage<T>(
   key: string,
   initialValue: T,
@@ -11,63 +59,23 @@ function useLocalStorage<T>(
   
   const prefixedKey = userEmail ? `${userEmail}_${key}` : key;
 
+  // Initialize state using our safe getter function.
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
-      return initialValue;
-    }
-    try {
-      const item = window.localStorage.getItem(prefixedKey);
-      if (item) {
-        return JSON.parse(item);
-      }
-      if (key === 'workspaces' && userEmail) {
-        const newWorkspace: Workspace = {
-          id: DEFAULT_WORKSPACE_ID,
-          name: 'Мое пространство',
-          widgets: [],
-          layouts: {},
-        };
-        return [newWorkspace] as unknown as T;
-      }
-      return initialValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key “${prefixedKey}”:`, error);
-      return initialValue;
-    }
+    return getInitialValue(key, initialValue, userEmail);
   });
   
-  // This effect handles user login/logout, which changes the prefixedKey.
-  // It re-initializes the state based on the new key.
+  // This effect re-initializes the state when the user logs in or out (prefixedKey changes).
   useEffect(() => {
-    let value: T;
-    if (typeof window === 'undefined') {
-      value = initialValue;
-    } else {
-      try {
-        const item = window.localStorage.getItem(prefixedKey);
-        if (item) {
-          value = JSON.parse(item);
-        } else if (key === 'workspaces' && userEmail) {
-          const newWorkspace: Workspace = { id: DEFAULT_WORKSPACE_ID, name: 'Мое пространство', widgets: [], layouts: {}, };
-          value = [newWorkspace] as unknown as T;
-        } else {
-          value = initialValue;
-        }
-      } catch (error) {
-        console.error(`Error reading localStorage key “${prefixedKey}”:`, error);
-        value = initialValue;
-      }
-    }
-    setStoredValue(value);
-  // The dependency array correctly triggers this effect only when the user context changes.
-  // We disable the lint rule because `initialValue` is only a fallback and should not trigger this effect.
+    setStoredValue(getInitialValue(key, initialValue, userEmail));
+  // This effect MUST run only when the user context changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefixedKey]);
 
 
+  // This effect persists any change in state back to localStorage.
   useEffect(() => {
     try {
-      if (typeof window !== 'undefined' && storedValue !== undefined) {
+      if (typeof window !== 'undefined') {
         window.localStorage.setItem(prefixedKey, JSON.stringify(storedValue));
       }
     } catch (error) {
