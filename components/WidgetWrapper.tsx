@@ -18,12 +18,14 @@ interface WidgetWrapperProps {
   onFolderColorChange?: (color: string) => void;
   onFolderToggle?: () => void;
   onFolderAddWidget?: () => void;
+  isAnythingDragging?: boolean;
   [key: string]: any; 
 }
 
 const WidgetWrapper: React.FC<WidgetWrapperProps> = ({ 
     children, onRemove, widgetId, widgetTitle, onTitleChange, theme, 
     isFolder, folderData, folderColor, onFolderColorChange, onFolderToggle, onFolderAddWidget,
+    isAnythingDragging,
     ...props 
 }) => {
   const { static: isStatic, ...divProps } = props;
@@ -122,11 +124,11 @@ const WidgetWrapper: React.FC<WidgetWrapperProps> = ({
   return (
     <motion.div
       {...divProps}
-      layout
+      layout={!isAnythingDragging}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       style={{ ...(props.style || {}), ...(folderColor ? { backgroundColor: folderColor } : {}) }}
       className="group bg-light-bg-secondary dark:bg-dark-bg-secondary backdrop-blur-3xl rounded-3xl shadow-soft-light dark:shadow-glass-dark shadow-glass-pane flex flex-col h-full overflow-hidden border border-light-border dark:border-dark-border transition-all duration-300 hover:shadow-soft-light-hover dark:hover:border-white/20 dark:hover:shadow-glow-violet"
     >

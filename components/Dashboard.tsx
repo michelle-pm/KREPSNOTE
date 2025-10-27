@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, Suspense, lazy } from 'react';
+import React, { useMemo, useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
 import { Widget, WidgetType, PlanData, PieData, LineData, TextData, WidgetData, TitleData, ChecklistData, ImageData, ArticleData, FolderData } from '../types';
 import WidgetWrapper from './WidgetWrapper';
@@ -70,8 +70,6 @@ const Dashboard: React.FC<DashboardProps> = ({
         const newSeries = lineData.series.map(s => {
           const newData = s.data.map(point => {
             if (point.dependency) {
-              // FIX: Explicitly cast sourceWidget to Widget to resolve type inference issues where
-              // its properties were inaccessible. This allows safe checking of widget type and data access.
               const sourceWidget = widgetMap.get(point.dependency.widgetId) as Widget | undefined;
               if (sourceWidget && (sourceWidget.type === WidgetType.Plan || sourceWidget.type === WidgetType.Pie)) {
                 const sourceValue = (sourceWidget.data as PlanData | PieData)[point.dependency.dataKey];
@@ -90,7 +88,9 @@ const Dashboard: React.FC<DashboardProps> = ({
     });
   }, [widgets]);
 
-  const renderWidget = (widget: Widget, allWidgets: Widget[]) => {
+  const isAnythingDragging = !!draggingWidgetId;
+
+  const renderWidget = useCallback((widget: Widget, allWidgets: Widget[]) => {
     const updateData = (data: WidgetData) => onUpdateWidgetData(widget.id, data);
     
     switch (widget.type) {
@@ -125,11 +125,12 @@ const Dashboard: React.FC<DashboardProps> = ({
             onDragStop={onDragStop}
             onResizeStop={onResizeStop}
             setDraggingWidgetId={setDraggingWidgetId}
+            isAnythingDragging={isAnythingDragging}
         />;
       default:
         return <div>Unknown widget type</div>;
     }
-  };
+  }, [onUpdateWidgetData, onRemoveWidget, onInitiateAddWidget, onChildrenLayoutChange, onToggleFolder, theme, onDragStart, onDragStop, onResizeStop, setDraggingWidgetId, isAnythingDragging]);
   
   const processedLayouts = useMemo(() => {
     const newLayouts = JSON.parse(JSON.stringify(layouts));
@@ -202,6 +203,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               onFolderColorChange={widget.type === WidgetType.Folder ? (newColor) => onUpdateWidgetData(widget.id, { ...widget.data, color: newColor }) : undefined}
               onFolderToggle={() => onToggleFolder(widget.id)}
               onFolderAddWidget={widget.type === WidgetType.Folder ? () => onInitiateAddWidget(widget.id) : undefined}
+              isAnythingDragging={isAnythingDragging}
             >
               <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-gray-400">Загрузка виджета...</div>}>
                 {renderWidget(widget, synchronizedWidgets)}

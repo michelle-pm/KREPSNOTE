@@ -23,12 +23,13 @@ interface FolderWidgetProps {
   onDragStop: () => void;
   onResizeStop: () => void;
   setDraggingWidgetId: (id: string | null) => void;
+  isAnythingDragging: boolean;
 }
 
 const FolderWidget: React.FC<FolderWidgetProps> = ({ 
     widget, allWidgets, renderWidget, onUpdateWidgetData, 
     onRemoveWidget, onInitiateAddWidget, onChildrenLayoutChange, onToggleFolder,
-    theme, onDragStart, onDragStop, onResizeStop
+    theme, onDragStart, onDragStop, onResizeStop, isAnythingDragging
 }) => {
   const data = widget.data as FolderData;
   const { isCollapsed, childrenLayouts } = data;
@@ -82,22 +83,27 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                 open: { opacity: 1, height: 'auto' },
                 collapsed: { opacity: 0, height: 0 }
             }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden flex flex-col flex-grow"
         >
           {childrenWidgets.length === 0 ? (
             <div className="w-full h-full flex-grow p-4 flex">
-                <div className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 border-2 border-dashed border-accent/50 flex flex-col items-center justify-center p-8">
-                    <p className="text-center text-light-text-secondary dark:text-dark-text/60 mb-4 px-4">
-                        Эта папка пуста. Добавьте в нее виджеты.
-                    </p>
-                    <button
-                        onClick={() => onInitiateAddWidget(widget.id)}
-                        className="flex items-center gap-3 bg-accent hover:bg-accent-dark text-dark-bg font-bold dark:bg-accent dark:hover:bg-accent-dark dark:text-dark-bg transition-all duration-300 px-6 py-3 rounded-xl text-base shadow-lg hover:shadow-glow-violet transform hover:scale-105 no-drag"
-                    >
-                        <Plus size={20} />
-                        <span>Добавить виджет</span>
-                    </button>
+                <div 
+                    onClick={() => onInitiateAddWidget(widget.id)}
+                    className="w-full h-full rounded-2xl bg-black/5 dark:bg-white/5 flex flex-col items-center justify-center p-8 relative overflow-hidden transition-all duration-300 group cursor-pointer border border-transparent hover:border-accent/50 hover:bg-accent-light/30 dark:hover:bg-accent/10"
+                >
+                    <div className="absolute inset-0 bg-accent/10 dark:bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150 blur-3xl"></div>
+                    <div className="relative z-10 flex flex-col items-center justify-center text-center transition-transform duration-300 group-hover:scale-105">
+                        <div className="p-4 bg-accent/20 dark:bg-accent/10 rounded-full mb-4 transition-colors duration-300 group-hover:bg-accent/30 dark:group-hover:bg-accent/20">
+                                <Plus size={24} className="text-accent dark:text-accent-dark" />
+                        </div>
+                        <p className="font-semibold text-lg text-light-text dark:text-dark-text mb-1">
+                            Добавить виджет
+                        </p>
+                        <p className="text-sm text-light-text-secondary dark:text-dark-text/60">
+                            Эта папка пуста
+                        </p>
+                    </div>
                 </div>
             </div>
           ) : (
@@ -134,6 +140,7 @@ const FolderWidget: React.FC<FolderWidgetProps> = ({
                               onFolderColorChange={child.type === WidgetType.Folder ? (newColor) => onUpdateWidgetData(child.id, { ...child.data, color: newColor }) : undefined}
                               onFolderToggle={() => onToggleFolder(child.id)}
                               onFolderAddWidget={child.type === WidgetType.Folder ? () => onInitiateAddWidget(child.id) : undefined}
+                              isAnythingDragging={isAnythingDragging}
                           >
                               <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">Загрузка...</div>}>
                                 {renderWidget(child, allWidgets)}
